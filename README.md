@@ -20,3 +20,9 @@ To build a fully local, responsive system, I am aggressively deploying a modern 
 * **Phase 1: The Infant** – Establishing baseline local inference, initial memory bottlenecks, and raw token generation.
 * **Phase 2: Learning to Walk** – Optimizing VRAM usage, quantizing models, and fine-tuning context windows.
 * **Phase 3: The Terminator** – Implemented agentic workflows, custom local memory retrieval, and maximum hardware efficiency.
+
+## Future Roadmap: Tarantula V2.0 (The Apex Predator)
+With the local engine functional, the next architectural iteration focuses on moving from a single-threaded local script to an optimized, event-driven pipeline:
+* **Asynchronous Ingestion:** Transitioning the ingestion pipeline to `asyncio` to handle concurrent data streams into ChromaDB without blocking local model inference.
+* **Vector Index Optimization:** Implementing advanced quantization and custom distance metrics to optimize high-dimensional vector lookups on tight VRAM budgets.
+* **Agentic Multi-Tool Routing:** Allowing the core model to dynamically decide when to query MongoDB for structural state versus when to query ChromaDB for semantic context.
