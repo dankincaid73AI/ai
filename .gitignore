@@ -1,0 +1,14 @@
+# Databases & Local Data
+.env
+chroma_data/
+
+# Environments & Dependencies
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Visual Studio Code Preferences
+.vscode
