@@ -16,3 +16,6 @@ All notable changes to **Project Tarantula** will be documented in this file.
 
 ### Changed
 - Refactored `.env` structure to isolate `MONGO_USER` and `MONGO_PASS` variables.
+
+### Fixed
+- Updated .gitignore to remove .DS_Store from any future commit.
