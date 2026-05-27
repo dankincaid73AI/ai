@@ -1,6 +1,7 @@
 # Databases & Local Data
 .env
 chroma_data/
+.DS_Store
 
 # Environments & Dependencies
 venv/
