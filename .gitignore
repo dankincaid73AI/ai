@@ -1,7 +1,6 @@
 # Databases & Local Data
 .env
 chroma_data/
-.DS_Store
 
 # Environments & Dependencies
 venv/
@@ -13,3 +12,4 @@ __pycache__/
 
 # Visual Studio Code Preferences
 .vscode
+.DS_Store
