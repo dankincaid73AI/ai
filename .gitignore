@@ -13,3 +13,6 @@ __pycache__/
 # Visual Studio Code Preferences
 .vscode
 .DS_Store
+
+#linters and formatters
+.flake8

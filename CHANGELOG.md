@@ -19,3 +19,8 @@ All notable changes to **Project Tarantula** will be documented in this file.
 
 ### Fixed
 - Updated .gitignore to remove .DS_Store from any future commit.
+
+## [1.0.1-alpha] - 2026-05-28
+### Added
+- Established structured local directories (`data/raw/text/`) to isolate source files by format type.
+- Created a `fetch_data.py` utility script to download the baseline Paul Graham essay dataset for text ingestion validation.
