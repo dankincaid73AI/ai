@@ -2,6 +2,21 @@
 
 All notable changes to **Project Tarantula** will be documented in this file.
 
+## [1.0.2-alpha] - 2026-05-29
+### Added
+- Implemented `track_ingestion.py` for registering ingestion tasks in MongoDB with timezone-aware UTC timestamps.
+- Added connection verification and system health-check logic for database pipelines.
+- Integrated `urllib.parse` for secure, dynamic MongoDB URI generation to handle special characters in credentials.
+- Created `check_mongo.py` utility for auditing ingestion logs and verifying data persistence.
+
+### Fixed
+- Resolved `DeprecationWarning` regarding `datetime.utcnow()` by migrating to `datetime.now(timezone.utc)`.
+
+## [1.0.1-alpha] - 2026-05-28
+### Added
+- Established structured local directories (`data/raw/text/`) to isolate source files by format type.
+- Created a `fetch_data.py` utility script to download the baseline Paul Graham essay dataset for text ingestion validation.
+
 ## [1.0.0-alpha] - 2026-05-26
 ### Added
 - Initialized Dockerized MongoDB environment.
@@ -19,8 +34,3 @@ All notable changes to **Project Tarantula** will be documented in this file.
 
 ### Fixed
 - Updated .gitignore to remove .DS_Store from any future commit.
-
-## [1.0.1-alpha] - 2026-05-28
-### Added
-- Established structured local directories (`data/raw/text/`) to isolate source files by format type.
-- Created a `fetch_data.py` utility script to download the baseline Paul Graham essay dataset for text ingestion validation.
