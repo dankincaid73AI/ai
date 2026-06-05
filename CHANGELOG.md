@@ -2,6 +2,16 @@
 
 All notable changes to **Project Tarantula** will be documented in this file.
 
+## [1.1.3] - 2026-06-05
+### Changed
+- **Project Architecture:** Executed a comprehensive restructuring of the root directory to separate concerns, improve scalability, and establish a production-ready repository.
+- **Core Engine Migration:** Relocated primary pipeline logic from the root directory into a newly established `src/` directory tree.
+- **Test Isolation:** Migrated all validation and database check scripts (`check_mongo.py`, `chroma_initial_check.py`, `pre_ingestion_db_test.py`, `stack_verification.py`) into a dedicated `tests/` directory.
+
+### Added
+- **Source Subdirectories:** Implemented `src/db/`, `src/ingestion/`, and `src/query/` to isolate database connectivity, data processing, and retrieval operations.
+- **Data Subdirectories:** Established a `data/raw/` directory structure for local file processing.
+
 ## [1.1.2] - 2026-06-05
 ### Added
 - Created `main.py` entry point to serve as an interactive terminal Command Line Interface (CLI).
@@ -21,8 +31,8 @@ All notable changes to **Project Tarantula** will be documented in this file.
 - **Local Inference:** Integrated local LLM support, allowing synthesis of retrieved context without external API dependencies.
 
 ### Fixed
-- **Code Quality:** Refactored `query_engine.py` to strictly adhere to PEP 8/Flake8 linting standards[cite: 1].
-- **Error Handling:** Added local model existence verification to catch 404 response errors during Ollama communication[cite: 1].
+- **Code Quality:** Refactored `query_engine.py` to strictly adhere to PEP 8/Flake8 linting standards[cite: 1.
+- **Error Handling:** Added local model existence verification to catch 404 response errors during Ollama communication[cite: 1.
 
 ## [1.1.0] - 2026-06-05
 ### Added

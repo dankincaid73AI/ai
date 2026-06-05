@@ -2,7 +2,7 @@ import os
 import chromadb
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from dotenv import load_dotenv
-import track_ingestion
+import src.ingestion.track_ingestion as track_ingestion
 
 load_dotenv()
 

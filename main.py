@@ -4,7 +4,7 @@ Entry point for interacting with the query engine.
 """
 
 # Import directly from your root query_engine.py file
-from query_engine import query_tarantula
+from src.query.query_engine import query_tarantula
 
 
 def run_cli():
