@@ -2,6 +2,11 @@
 
 All notable changes to **Project Tarantula** will be documented in this file.
 
+## [1.1.4] - 2026-06-05
+### Added
+- **PDF Ingestion Scaffolding:** Initialized `src/ingestion/pdf_ingestion.py` with module-level documentation to prepare for upcoming feature implementation.
+- **Dependencies:** Integrated `pymupdf` into `requirements.txt` to support future PDF parsing and text extraction capabilities.
+
 ## [1.1.3] - 2026-06-05
 ### Changed
 - **Project Architecture:** Executed a comprehensive restructuring of the root directory to separate concerns, improve scalability, and establish a production-ready repository.
