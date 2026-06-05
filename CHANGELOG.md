@@ -2,6 +2,17 @@
 
 All notable changes to **Project Tarantula** will be documented in this file.
 
+## [1.1.0] - 2026-06-05
+### Added
+- **Idempotency Guardrails:** Implemented pre-ingestion checks in ChromaDB to prevent vector duplication.
+- **Status Synchronization:** Automated MongoDB document status transitions from `pending` to `completed` post-vectorization.
+- **Maintenance Utilities:** Added `wipe_file_chunks` to allow surgical deletion of specific document vectors.
+
+### Fixed
+- **Architectural Refactor:** Centralized MongoDB connection logic into `track_ingestion.py` for improved modularity.
+- **Data Integrity:** Resolved potential race conditions in ingestion by adding strict `ObjectId` handling.
+- **Code Quality:** Standardized formatting to comply with PEP 8 and Flake8 linter requirements.
+
 ## [1.0.2-alpha] - 2026-05-29
 ### Added
 - Implemented `track_ingestion.py` for registering ingestion tasks in MongoDB with timezone-aware UTC timestamps.
