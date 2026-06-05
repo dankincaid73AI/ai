@@ -1,6 +1,14 @@
 # Changelog
 
 All notable changes to **Project Tarantula** will be documented in this file.
+## [1.1.1] - 2026-06-05
+### Added
+- **Query Engine:** Implemented `query_engine.py` to enable local Retrieval-Augmented Generation (RAG) using Ollama.
+- **Local Inference:** Integrated local LLM support, allowing synthesis of retrieved context without external API dependencies.
+
+### Fixed
+- **Code Quality:** Refactored `query_engine.py` to strictly adhere to PEP 8/Flake8 linting standards[cite: 1].
+- **Error Handling:** Added local model existence verification to catch 404 response errors during Ollama communication[cite: 1].
 
 ## [1.1.0] - 2026-06-05
 ### Added
