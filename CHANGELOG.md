@@ -1,6 +1,20 @@
 # Changelog
 
 All notable changes to **Project Tarantula** will be documented in this file.
+
+## [1.1.2] - 2026-06-05
+### Added
+- Created `main.py` entry point to serve as an interactive terminal Command Line Interface (CLI).
+- Implemented an infinite query loop (`while True`) featuring clean termination commands (`quit`, `exit`).
+- Added user experience feedback states including status markers ("Thinking...") and formatted output markers.
+
+### Changed
+- Integrated CLI directly with the root-level `query_engine.py` module to streamline execution from the project root directory.
+
+### Verified
+- Confirmed strict prompt constraint compliance; system correctly reports an absence of data in the vector store rather than fallback hallucination.
+- Validated keyboard interrupt handling (`Ctrl + C`) for abrupt termination.
+
 ## [1.1.1] - 2026-06-05
 ### Added
 - **Query Engine:** Implemented `query_engine.py` to enable local Retrieval-Augmented Generation (RAG) using Ollama.
