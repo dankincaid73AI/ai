@@ -38,6 +38,6 @@ def query_tarantula(question, model="llama3:8b"):
 
 
 if __name__ == "__main__":
-    USER_QUERY = "What did the author work on before college?"
+    USER_QUERY = "What is particulary stand out about Paul?"
     print(f"🤖 Querying: {USER_QUERY}...\n")
     print(f"💡 Answer: {query_tarantula(USER_QUERY)}")
