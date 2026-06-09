@@ -2,6 +2,10 @@
 
 All notable changes to **Project Tarantula** will be documented in this file.
 
+## [1.1.5] - 2026-06-08
+### Added
+- **PDF Ingestion Test:** Initialized `src/tests/test_pdf_ingestion.py` to validate PDF ingestion capabilities.
+
 ## [1.1.4] - 2026-06-05
 ### Added
 - **PDF Ingestion Scaffolding:** Initialized `src/ingestion/pdf_ingestion.py` with module-level documentation to prepare for upcoming feature implementation.
