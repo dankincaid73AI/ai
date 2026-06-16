@@ -2,6 +2,12 @@
 
 All notable changes to **Project Tarantula** will be documented in this file.
 
+## [v1.1.7] - 2026-06-16
+### Added
+- **Interactive Persona Menu:** Added a startup configuration interface in `main.py` that allows users to select distinct operational personas (e.g., Research Assistant, angry rude old man, overly enthusiastic game show host) before launching the main query interface.
+- **Dynamic System Prompts:** Updated the core execution block in `src/query/query_engine.py` to seamlessly accept and pipe custom persona boundaries straight into the local `llama3:8b` context window.
+- **Repository Asset Management:** Created a centralized `/demos` directory at the project root to securely house `.cast` performance captures for showcase readiness.
+
 ## [1.1.8] - 2026-06-16
 ### Added
 - **Path Locking:** Implemented a unified absolute path resolution system using `find_dotenv` and `PROJECT_ROOT` to prevent duplicated database directories.
