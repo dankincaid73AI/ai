@@ -1,5 +1,6 @@
 import os
 import urllib.parse
+import hashlib
 from datetime import datetime, timezone
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -25,18 +26,40 @@ def get_mongo_db():
     return db["ingestion_logs"]
 
 
+def calculate_file_hash(file_path: str) -> str:
+    """Generates a SHA-256 hash to uniquely identify file contents."""
+    sha256_hash = hashlib.sha256()
+    try:
+        with open(file_path, "rb") as f:
+            for byte_block in iter(lambda: f.read(4096), b""):
+                sha256_hash.update(byte_block)
+        return sha256_hash.hexdigest()
+    except Exception as e:
+        print(f"❌ Error calculating hash for {file_path}: {e}")
+        return ""
+
+
 def register_ingestion(file_path: str):
-    """Creates a master control record in MongoDB."""
+    """Creates a master control record in MongoDB using a content hash."""
+    file_hash = calculate_file_hash(file_path)
+
+    if not file_hash:
+        print("❌ Could not generate file hash. Aborting registration.")
+        return None
+
     collection = get_mongo_db()
-    existing_record = collection.find_one({"filepath": file_path})
+
+    # Check for existing record using the unique hash instead of filepath
+    existing_record = collection.find_one({"file_hash": file_hash})
 
     if existing_record:
-        print(f"⚠️ Record already exists for {file_path}. Skipping.")
+        print("⚠️ Record already exists for this file content. Skipping.")
         return existing_record["_id"]
 
     record = {
         "filename": os.path.basename(file_path),
         "filepath": file_path,
+        "file_hash": file_hash,
         "status": "pending",
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -48,7 +71,10 @@ def register_ingestion(file_path: str):
 
 def mark_as_completed(doc_id):
     """Updates the status of a document to 'completed' in MongoDB."""
-    collection = get_mongo_db()  # Get the collection anew
+    if not doc_id:
+        return
+
+    collection = get_mongo_db()
 
     # Ensure doc_id is an ObjectId if it isn't one already
     query_id = ObjectId(doc_id) if not isinstance(doc_id, ObjectId) else doc_id
@@ -67,7 +93,19 @@ def mark_as_completed(doc_id):
 
 
 if __name__ == "__main__":
-    FILE_PATH = "./data/raw/text/paul_graham_essay.txt"
+    # Pointing to the target PDF
+    FILE_PATH = "../../data/raw/pdf/1706.03762v7.pdf"
+
+    # Register the file to MongoDB as 'pending'
     doc_id = register_ingestion(FILE_PATH)
-    # Testing the update
-    mark_as_completed(doc_id)
+
+    # We DO NOT call mark_as_completed(doc_id) here.
+    # The status will remain 'pending' until the ingestion/vectorization
+    # module actually finishes its work.
+    msg = "".join(
+        [
+            f"🏁 File {FILE_PATH} is now tracked ",
+            "in MongoDB with status: 'pending'.",
+        ]
+    )
+    print(msg)

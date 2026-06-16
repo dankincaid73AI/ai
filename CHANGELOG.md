@@ -2,6 +2,13 @@
 
 All notable changes to **Project Tarantula** will be documented in this file.
 
+## [1.1.6] - 2026-06-15
+### Changed
+- **Idempotency Engine:** Upgraded `track_ingestion.py` to identify records via SHA-256 content hashing (`calculate_file_hash`) rather than relying purely on filepaths, guaranteeing tracking integrity if files are renamed or relocated.
+
+### Fixed
+- **Code Quality:** Refactored terminal message outputs inside the module execution block using explicit string compilation to comply with strict Flake8 (`E501`) line-length constraints.
+
 ## [1.1.5] - 2026-06-08
 ### Added
 - **PDF Ingestion Test:** Initialized `src/tests/test_pdf_ingestion.py` to validate PDF ingestion capabilities.
