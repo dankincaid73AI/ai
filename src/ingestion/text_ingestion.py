@@ -1,18 +1,24 @@
 import os
 import chromadb
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 import src.ingestion.track_ingestion as track_ingestion
 
-load_dotenv()
+# 1. Automatically find the .env file anywhere in the project tree
+dotenv_path = find_dotenv()
+load_dotenv(dotenv_path)
+
+# 2. Set the Project Root strictly to where the .env file lives
+PROJECT_ROOT = os.path.dirname(dotenv_path)
+
+# 3. Pull the CHROMA_PATH and attach it securely to the Project Root
+raw_chroma_path = os.getenv("CHROMA_PATH", "./chroma_data")
+full_path = os.path.join(PROJECT_ROOT, raw_chroma_path)
+LOCKED_CHROMA_PATH = os.path.abspath(full_path)
 
 
 def wipe_file_chunks(collection, doc_id):
     """Wipes all chunks associated with a specific doc_id from ChromaDB."""
-    # Chroma allows querying/deleting by IDs
-    # Since we prefixed IDs with doc_id, we can find them
-    # Note: This is a simplified approach; in production,
-    # you might use get() to fetch all matching IDs first.
     all_docs = collection.get(where={"doc_id": doc_id})
     if all_docs["ids"]:
         collection.delete(ids=all_docs["ids"])
@@ -20,17 +26,22 @@ def wipe_file_chunks(collection, doc_id):
 
 
 def ingest_text_file(file_path):
+    # Fix: Check if file exists BEFORE registering it in the tracker
+    if not os.path.exists(file_path):
+        print(f"❌ File not found: {file_path}")
+        return
+
+    # Register the ingestion tracking ID
     doc_id = str(track_ingestion.register_ingestion(file_path))
-    client = chromadb.PersistentClient(path="./chroma_data")
+
+    # Connect using the locked absolute path
+    print(f"Connecting to ChromaDB at: {LOCKED_CHROMA_PATH}")
+    client = chromadb.PersistentClient(path=LOCKED_CHROMA_PATH)
     collection = client.get_or_create_collection(name="tarantula_docs")
 
     # Idempotency Check: Peek for the first chunk
     if len(collection.get(ids=[f"{doc_id}_0"])["ids"]) > 0:
         print(f"⚠️ Chunks for {doc_id} already exist. Skipping.")
-        return
-
-    if not os.path.exists(file_path):
-        print(f"❌ File not found: {file_path}")
         return
 
     with open(file_path, "r", encoding="utf-8") as f:

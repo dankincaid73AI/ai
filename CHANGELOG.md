@@ -2,6 +2,17 @@
 
 All notable changes to **Project Tarantula** will be documented in this file.
 
+## [1.1.8] - 2026-06-16
+### Added
+- **Path Locking:** Implemented a unified absolute path resolution system using `find_dotenv` and `PROJECT_ROOT` to prevent duplicated database directories.
+
+### Changed
+- **Code Quality:** Refactored line lengths across database connection logic and prompt arrays to comply with strict `Black` and `Flake8` character limits.
+
+### Fixed
+- **Data Integrity:** Reordered execution inside `text_ingestion.py` to validate file existence before writing tracking records to MongoDB.
+- **Directory Duplication:** Eliminated the working directory trap in `text_ingestion.py` and `view_chroma.py` by removing hardcoded relative paths.
+
 ## [1.1.7] - 2026-06-16
 ### Added
 - **Dependencies:** Included `pytest` in `requirements.txt` to standardize the testing environment and ensure reproducibility.
