@@ -2,6 +2,19 @@
 
 All notable changes to **Project Tarantula** will be documented in this file.
 
+## [1.1.7] - 2026-06-16
+### Added
+- **Dependencies:** Included `pytest` in `requirements.txt` to standardize the testing environment and ensure reproducibility.
+### Changed
+- **Architectural Stabilization:** Executed a formal cleanup of the project root by separating production logic (`src/`) from experimental scratchpad scripts (`scripts/`).
+- **Pipeline Execution:** Standardized module pathing by adopting absolute imports (`src.ingestion.*`), ensuring reliable execution via `python -m` from the project root.
+- **Code Quality:** Refactored the core test suite (`tests/unit/test_pdf_ingestion_mongo.py`) to achieve full `Black` and `Flake8` compliance.
+- **Linting:** Resolved strict line-length (`E501`) and import-sorting violations across the ingestion pipeline and test files.
+
+### Fixed
+- **Module Resolution:** Eliminated `ModuleNotFoundError` by transitioning to modular execution, allowing the Python interpreter to correctly resolve the `src` package hierarchy.
+- **Test Integrity:** Standardized test file formatting to eliminate non-breaking space characters and ensure consistent behavior across environments.
+
 ## [1.1.6] - 2026-06-15
 ### Changed
 - **Idempotency Engine:** Upgraded `track_ingestion.py` to identify records via SHA-256 content hashing (`calculate_file_hash`) rather than relying purely on filepaths, guaranteeing tracking integrity if files are renamed or relocated.
