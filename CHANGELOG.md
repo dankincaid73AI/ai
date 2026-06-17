@@ -2,6 +2,13 @@
 
 All notable changes to **Project Tarantula V1.0** will be documented in this file.
 
+## [1.1.9] - 2026-06-17
+### Added
+- **Chunking Dry Run:** Implemented a pre-vectorization execution flow in `pdf_ingestion.py` that visually outputs text chunks to the terminal for boundary auditing without writing to ChromaDB.
+
+### Fixed
+- **Code Quality:** Refactored `pdf_ingestion.py` to completely resolve Flake8 `E501` line-length violations and Black formatting conflicts via variable extraction.
+
 ## [1.1.8] - 2026-06-16
 ### Added
 - **Visual Assets:** Added demonstration files (`funny_little_demo.cast`, `funny_little_demo.gif`) to the `/demos` directory.
