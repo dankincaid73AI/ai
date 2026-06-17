@@ -1,6 +1,11 @@
 # Changelog
 
-All notable changes to **Project Tarantula** will be documented in this file.
+All notable changes to **Project Tarantula V1.0** will be documented in this file.
+
+## [1.1.8] - 2026-06-16
+### Added
+- **Visual Assets:** Added demonstration files (`funny_little_demo.cast`, `funny_little_demo.gif`) to the `/demos` directory.
+- **Portfolio Readiness:** Provided visual proof of the dynamic system prompt injection and strict RAG guardrails functioning within the interactive CLI.
 
 ## [v1.1.7] - 2026-06-16
 ### Added
