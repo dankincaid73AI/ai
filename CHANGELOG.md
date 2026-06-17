@@ -2,6 +2,16 @@
 
 All notable changes to **Project Tarantula V1.0** will be documented in this file.
 
+## [1.1.11] - 2026-06-17
+### Added
+- **Integrated Ingestion Pipeline:** Finalized `pdf_ingestion.py` with full PyMuPDF extraction capabilities.
+- **Transactional Integrity:** Implemented MongoDB state synchronization; ingestion tasks now atomically transition from `pending` to `completed` upon successful vectorization.
+- **Visual Validation:** Documented system operation with `pdf_ingestion_results.gif` in the `/demos` directory.
+
+### Fixed
+- **Retrieval Physics:** Resolved semantic similarity blind spots in the query engine by optimizing query terminology.
+- **Idempotency:** Verified tracking logic to ensure that repeated ingestion attempts handle file states gracefully without duplicating vector records.
+
 ## [1.1.9] - 2026-06-17
 ### Added
 - **Chunking Dry Run:** Implemented a pre-vectorization execution flow in `pdf_ingestion.py` that visually outputs text chunks to the terminal for boundary auditing without writing to ChromaDB.

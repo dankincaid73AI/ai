@@ -25,7 +25,7 @@ def query_tarantula(question, persona="research assistant", model="llama3:8b"):
     client = chromadb.PersistentClient(path=LOCKED_CHROMA_PATH)
     collection = client.get_or_create_collection(name="tarantula_docs")
 
-    results = collection.query(query_texts=[question], n_results=3)
+    results = collection.query(query_texts=[question], n_results=5)
 
     if not results["documents"] or not results["documents"][0]:
         return "No relevant context found in the database."
