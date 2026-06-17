@@ -1,13 +1,12 @@
-"""
-PDF Ingestion Module for Project Tarantula.
+"""PDF Ingestion Module for Project Tarantula.
 
-This module is responsible for extracting text and metadata from
-PDF files using PyMuPDF and preparing them for vectorization.
+This module extracts text and metadata from PDF files using
+PyMuPDF and prepares them for vectorization.
 """
 
 import argparse
 import fitz  # PyMuPDF
-from src.ingestion.track_ingestion import register_ingestion, mark_as_completed
+from src.ingestion.track_ingestion import register_ingestion
 
 
 def extract_pdf_text(file_path: str) -> str:
@@ -24,54 +23,68 @@ def extract_pdf_text(file_path: str) -> str:
 
 
 def process_pdf_pipeline(file_path: str):
-    """Orchestrates tracking, extraction, vectorization, and completion."""
+    """Orchestrates tracking and visual chunking validation."""
     # 1. Register intent to ingest (Status: Pending)
     doc_id = register_ingestion(file_path)
     if not doc_id:
+        print("❌ Failed to register document in MongoDB.")
         return
+
+    print(f"✅ Registered in MongoDB ID: {doc_id}")
+    print("(Status: pending)")
 
     # 2. Extract the raw data
     print(f"⏳ Extracting text from: {file_path}")
     raw_text = extract_pdf_text(file_path)
 
     if not raw_text.strip():
-        print(f"⚠️ No text extracted from {file_path}. " "Aborting pipeline.")
+        print(f"⚠️ No text from {file_path}. Aborting.")
         return
 
-    # 3. Vectorize and push to ChromaDB
-    print("⏳ Chunking and storing in ChromaDB...")
-    # NOTE: chunk_and_store should return a boolean success flag
-    # chroma_success = chunk_and_store(doc_id, file_path, raw_text)
-    chroma_success = True  # Placeholder until Chroma logic is wired
+    # 3. DRY RUN: Chunk the file and output to terminal
+    print("\n--- 🛠️ DRY RUN: Executing Text Chunking ---")
 
-    # 4. Close the loop ONLY if ChromaDB succeeds
-    if chroma_success:
-        mark_as_completed(doc_id)
-    else:
-        msg = "".join(
-            [
-                f"❌ ChromaDB ingestion failed for {file_path}. ",
-                "MongoDB status remains 'pending'.",
-            ]
-        )
-        print(msg)
+    chunk_size = 1000
+    chunk_overlap = 200
+
+    words = raw_text.split()
+    chunks = []
+    current_chunk = []
+    current_length = 0
+
+    for word in words:
+        current_chunk.append(word)
+        current_length += len(word) + 1
+        if current_length >= chunk_size:
+            chunks.append(" ".join(current_chunk))
+            overlap_count = max(1, int(chunk_overlap / 10))
+            # Slice with no surrounding whitespace to satisfy linters
+            current_chunk = current_chunk[-overlap_count:]
+            current_length = sum(len(w) + 1 for w in current_chunk)
+
+    if current_chunk:
+        chunks.append(" ".join(current_chunk))
+
+    # Print out the chunks sequentially for audit
+    for idx, chunk in enumerate(chunks):
+        print(f"\n--- [ Chunk {idx + 1} ] ---")
+        print(f"Length: {len(chunk)} chars")
+        print(chunk)
+        print("-" * 40)
+
+    print(f"\n🚀 Split text into {len(chunks)} chunks.")
+    print("🛑 Pipeline paused: No ChromaDB write executed.")
+    print("MongoDB status remains 'pending'.")
 
 
 if __name__ == "__main__":
-    # 1. Set up the argument parser
-    parser = argparse.ArgumentParser(
-        description="Ingest a PDF file into Project Tarantula."
-    )
-
-    # 2. Add the file path argument
+    desc = "Ingest a PDF file (Dry Run Mode)."
+    parser = argparse.ArgumentParser(description=desc)
     parser.add_argument(
         "filepath",
         type=str,
-        help="The relative or absolute path to the PDF file to ingest.",
+        help="The path to the PDF file to ingest.",
     )
 
-    # 3. Parse the CLI inputs
     args = parser.parse_args()
-
-    # 4. Pass the user-provided path to your pipeline
     process_pdf_pipeline(args.filepath)
