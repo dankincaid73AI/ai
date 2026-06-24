@@ -2,6 +2,14 @@
 
 All notable changes to **Project Tarantula V1.0** will be documented in this file.
 
+## [1.1.12] - 2026-06-23
+### Added
+- **UI Integration:** Developed `tarantula_rag_tool.py` to establish a direct connection between Open WebUI and the local ChromaDB vector store.
+- **Tool Versioning:** Created the `open_webui_tools/` directory to track and version-control Python tools injected into the Open WebUI container. 
+
+### Verified
+- **End-to-End RAG:** Successfully validated the complete pipeline; Open WebUI can successfully query, retrieve, and cite local vector data via the `llama3:8b` model.
+
 ## [1.1.11] - 2026-06-17
 ### Added
 - **Integrated Ingestion Pipeline:** Finalized `pdf_ingestion.py` with full PyMuPDF extraction capabilities.
