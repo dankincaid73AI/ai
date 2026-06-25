@@ -2,6 +2,14 @@
 
 All notable changes to **Project Tarantula V1.0** will be documented in this file.
 
+## [1.1.13] - 2026-06-24
+### Added
+- **Project Media:** Created `demos/videos/` directory to store visual documentation.
+- **Proof of Concept:** Added `open_webui_poc_06242026.mov` video demonstrating successful end-to-end integration between Open WebUI, the custom RAG tool, and the local ChromaDB instance.
+
+### Changed
+- **Tool Metadata:** Updated the header string in `tarantula_rag_tool.py` to specify the author name.
+
 ## [1.1.12] - 2026-06-23
 ### Added
 - **UI Integration:** Developed `tarantula_rag_tool.py` to establish a direct connection between Open WebUI and the local ChromaDB vector store.

@@ -1,6 +1,6 @@
 """
 title: Project Tarantula RAG Tool
-author: You
+author: Dan Kincaid
 version: 1.0
 description: Allows Open WebUI to search the local Tarantula ChromaDB vector
 store.
