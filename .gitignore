@@ -16,3 +16,6 @@ __pycache__/
 
 #linters and formatters
 .flake8
+
+#commands
+commands.txt

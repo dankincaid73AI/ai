@@ -27,7 +27,7 @@ def get_mongo_db():
 
 
 def calculate_file_hash(file_path: str) -> str:
-    """Generates a SHA-256 hash to uniquely identify file contents."""
+    """Generates a SHA-256 hash to uniquely identify local file contents."""
     sha256_hash = hashlib.sha256()
     try:
         with open(file_path, "rb") as f:
@@ -39,27 +39,45 @@ def calculate_file_hash(file_path: str) -> str:
         return ""
 
 
-def register_ingestion(file_path: str):
-    """Creates a master control record in MongoDB using a content hash."""
-    file_hash = calculate_file_hash(file_path)
+def calculate_url_hash(url: str) -> str:
+    """Generates a SHA-256 hash to uniquely identify a URL."""
+    return hashlib.sha256(url.encode("utf-8")).hexdigest()
 
-    if not file_hash:
-        print("❌ Could not generate file hash. Aborting registration.")
-        return None
+
+def register_ingestion(source: str):
+    """Creates a master control record in MongoDB using a content hash."""
+
+    # Determine if the source is a URL or a local file path
+    is_url = source.startswith("http://") or source.startswith("https://")
+
+    if is_url:
+        content_hash = calculate_url_hash(source)
+        source_name = source  # Use the URL as the identifier name
+        source_type = "url"
+    else:
+        content_hash = calculate_file_hash(source)
+        source_name = os.path.basename(source)
+        source_type = "file"
+
+    if not content_hash:
+        print(f"❌ Hash failed for {source}. Aborting.")
 
     collection = get_mongo_db()
 
-    # Check for existing record using the unique hash instead of filepath
-    existing_record = collection.find_one({"file_hash": file_hash})
+    # Check for existing record using the unique hash
+    # Note: keeping the key as 'file_hash' to maintain backwards compatibility
+    # with any existing database records, but it represents the content hash.
+    existing_record = collection.find_one({"file_hash": content_hash})
 
     if existing_record:
-        print("⚠️ Record already exists for this file content. Skipping.")
+        print("⚠️ Record already exists for this content. Skipping.")
         return existing_record["_id"]
 
     record = {
-        "filename": os.path.basename(file_path),
-        "filepath": file_path,
-        "file_hash": file_hash,
+        "filename": source_name,
+        "filepath": source,
+        "file_hash": content_hash,
+        "source_type": source_type,
         "status": "pending",
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -83,29 +101,22 @@ def mark_as_completed(doc_id):
     filter_query = {"_id": query_id}
     new_values = {"$set": {"status": "completed"}}
 
-    # Perform the update
+    # Perform the update - THIS defines the 'result' variable
     result = collection.update_one(filter_query, new_values)
 
     if result.modified_count > 0:
         print(f"✅ MongoDB updated: {doc_id} marked as 'completed'.")
+    elif result.matched_count > 0:
+        print(f"✅ MongoDB checked: {doc_id} is already marked as 'completed'.")
     else:
-        print(f"⚠️ Warning: Could not update record {doc_id}.")
+        print(f"⚠️ Warning: Could not find record {doc_id} to update.")
 
 
 if __name__ == "__main__":
-    # Pointing to the target PDF
+    # Test pointing to a target PDF
     FILE_PATH = "../../data/raw/pdf/1706.03762v7.pdf"
+    doc_id_file = register_ingestion(FILE_PATH)
 
-    # Register the file to MongoDB as 'pending'
-    doc_id = register_ingestion(FILE_PATH)
-
-    # We DO NOT call mark_as_completed(doc_id) here.
-    # The status will remain 'pending' until the ingestion/vectorization
-    # module actually finishes its work.
-    msg = "".join(
-        [
-            f"🏁 File {FILE_PATH} is now tracked ",
-            "in MongoDB with status: 'pending'.",
-        ]
-    )
-    print(msg)
+    # Test pointing to a target URL
+    URL_PATH = "https://quotes.toscrape.com"
+    doc_id_url = register_ingestion(URL_PATH)

@@ -2,6 +2,20 @@
 
 All notable changes to **Project Tarantula V1.0** will be documented in this file.
 
+## [1.1.14] - 2026-06-26
+### Added
+- **Production URL Ingestion:** Finalized `url_ingestion.py` integrating Playwright for headless HTML text extraction, LangChain's `RecursiveCharacterTextSplitter` for semantic token chunking, and direct payload insertion into ChromaDB.
+- **Dry Run Pipeline Scaffolding:** Implemented a non-destructive verification pipeline script to test Playwright scraping efficiency and validate live text character volume measurements without writing vector payloads to ChromaDB.
+- **URL Ingestion Test Suite:** Created `tests/test_url_ingestion.py` to run database-isolated proof-of-concept checks, ensuring text boundary chunk calculations are functioning accurately before runtime deployment.
+- **Dependencies:** Updated `requirements.txt` to lock pinned environment versions for `playwright` (v1.60.0) and supporting framework engines.
+
+### Changed
+- **Unified State Tracking Architecture:** Updated `track_ingestion.py` to natively handle polymorphic data targets, adding `calculate_url_hash` alongside path utilities to securely store web data schemas inside MongoDB under a centralized `source_type` property.
+
+### Verified
+- **Idempotency Multi-Layer Safeguards:** Confirmed via `url_ingestion_indempotency_check_06252026.jpg` and `url_ingestion_06252026.png` that duplicating a target ingestion operation safely triggers structural collection blocks inside MongoDB and ChromaDB, gracefully abandoning duplicate records to preserve index state stability.
+- **RAG Live Inference Loop:** Documented via `url_ingestion_results.cast` and `url_ingestion_results.gif` that launching the interactive `main.py` CLI under a "Research Assistant" persona reads directly from local web vector data slices to properly output semantic quote validations for Marilyn Monroe and Albert Einstein.
+
 ## [1.1.13] - 2026-06-24
 ### Added
 - **Project Media:** Created `demos/videos/` directory to store visual documentation.
